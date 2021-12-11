@@ -1,0 +1,3 @@
+/target
+data/*.pgn
+tests/games/*.pgn
