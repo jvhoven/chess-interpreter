@@ -1,4 +1,4 @@
-use chess_interpreter::game::Game;
+use lib::game::Game;
 use std::fs;
 
 fn main() {

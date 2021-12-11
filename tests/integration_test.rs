@@ -1,6 +1,7 @@
 #![cfg(test)]
 mod tests {
-    use chess_interpreter::pgn_parser::{parse, Outcome};
+    use lib::game::GameResult;
+    use lib::parser::pgn;
     use glob::glob;
 
     #[test]
@@ -10,9 +11,9 @@ mod tests {
                 Ok(path) => {
                     println!("{:?}", path.display());
                     let contents = std::fs::read_to_string(path).unwrap();
-                    let game = parse(&contents);
+                    let game = pgn::parse(&contents);
 
-                    assert!(game.outcome != Outcome::Unknown, "Game has unknown outcome: {:?}", game);
+                    assert!(game.result != GameResult::Unknown, "Game has unknown outcome: {:?}", game);
                 }
                 Err(e) => println!("{:?}", e),
             }

@@ -3,6 +3,7 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct ParseResult {
     pub moves: Vec<Move>,
     pub tags: HashMap<String, String>,
@@ -24,17 +25,17 @@ fn format(data: &str) -> (String, HashMap<String, String>) {
 
     for line in data.lines() {
         // Skip empty lines
-        if line == "" {
+        if line.is_empty() {
             continue;
         }
 
         if is_metadata(line) {
-            let mut parts = line.split("\"");
+            let mut parts = line.split('\"');
             let key = parts
                 .next()
                 .unwrap()
-                .trim_start_matches("[")
-                .trim_end_matches("]")
+                .trim_start_matches('[')
+                .trim_end_matches(']')
                 .to_string();
             let value = parts.next().unwrap().to_string();
 
@@ -50,11 +51,10 @@ fn parse_moves(data: &str) -> Vec<Move> {
     let re: Regex = Regex::new(r"(\d+.\s+\S+\s+\S+)").unwrap();
     re.captures_iter(data)
         .map(|capture| Move {
-            white: capture[1].split(" ").nth(1).unwrap().to_string(),
-            black: capture[1].split(" ").nth(2).unwrap().to_string(),
+            white: capture[1].split(' ').nth(1).unwrap().to_string(),
+            black: capture[1].split(' ').nth(2).unwrap().to_string(),
             number: capture[1]
-                .split(".")
-                .nth(0)
+                .split('.').next()
                 .unwrap()
                 .parse::<u16>()
                 .expect("Could not parse move number"),
@@ -95,7 +95,7 @@ mod tests {
         [
             (
                 "",
-                Box::new(|moves: Vec<Move>| assert!(moves.len() == 0)) as Box<dyn Fn(Vec<Move>)>,
+                Box::new(|moves: Vec<Move>| assert!(moves.is_empty())) as Box<dyn Fn(Vec<Move>)>,
             ),
             (
                 "1. e4 e5",
@@ -127,7 +127,7 @@ mod tests {
             ("0-1", GameResult::BlackWins),
         ]
         .map(|(game, expected)| {
-            assert!(parse_result(&game) == expected);
+            assert!(parse_result(game) == expected);
         });
     }
 }
