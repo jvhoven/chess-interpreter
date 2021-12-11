@@ -1,8 +1,5 @@
-use font_kit::family_name::FamilyName;
-use font_kit::properties::Properties;
-use font_kit::source::SystemSource;
-use minifb::{MouseMode, Window, WindowOptions};
-use raqote::{DrawOptions, DrawTarget, PathBuilder, Point, SolidSource, Source};
+use minifb::{Window, WindowOptions};
+use raqote::{DrawOptions, DrawTarget, Path, PathBuilder, SolidSource, Source};
 const WIDTH: usize = 400;
 const HEIGHT: usize = 400;
 
@@ -16,40 +13,48 @@ fn main() {
         },
     )
     .unwrap();
-    let font = SystemSource::new()
-        .select_best_match(&[FamilyName::SansSerif], &Properties::new())
-        .unwrap()
-        .load()
-        .unwrap();
 
-    let size = window.get_size();
-    let mut dt = DrawTarget::new(size.0 as i32, size.1 as i32);
+    let (width, height) = window.get_size();
+    let gameboard = draw_gameboard(400, 400);
+
     loop {
-        dt.clear(SolidSource::from_unpremultiplied_argb(
-            0xff, 0xff, 0xff, 0xff,
-        ));
-        let mut pb = PathBuilder::new();
-        if let Some(pos) = window.get_mouse_pos(MouseMode::Clamp) {
-            pb.rect(pos.0, pos.1, 100., 130.);
-            let path = pb.finish();
-            dt.fill(
-                &path,
-                &Source::Solid(SolidSource::from_unpremultiplied_argb(0xff, 0, 0xff, 0)),
-                &DrawOptions::new(),
-            );
-            let pos_string = format!("{:?}", pos);
-            dt.draw_text(
-                &font,
-                36.,
-                &pos_string,
-                Point::new(0., 100.),
-                &Source::Solid(SolidSource::from_unpremultiplied_argb(0xff, 0, 0, 0)),
-                &DrawOptions::new(),
-            );
+        window
+            .update_with_buffer(gameboard.get_data(), width, height)
+            .unwrap();
+    }
+}
 
-            window
-                .update_with_buffer(dt.get_data(), size.0, size.1)
-                .unwrap();
+fn draw_gameboard(width: i32, height: i32) -> DrawTarget {
+    let mut dt = DrawTarget::new(width, height);
+    let square_size = width / 8;
+    let color_black = SolidSource::from_unpremultiplied_argb(0xff, 0xff, 0xff, 0xff);
+    let color_white = SolidSource::from_unpremultiplied_argb(0xff, 0, 0, 0);
+
+    for x in 0..8 {
+        for y in 0..8 {
+            let src = if (x + y) % 2 == 0 {
+                Source::Solid(color_black)
+            } else {
+                Source::Solid(color_white)
+            };
+
+            let square = draw_square(square_size, x, y);
+            dt.fill(&square, &src, &DrawOptions::new());
         }
     }
+
+    dt
+}
+
+fn draw_square(size: i32, x: i32, y: i32) -> Path {
+    let mut pb = PathBuilder::new();
+
+    pb.rect(
+        x as f32 * size as f32,
+        y as f32 * size as f32,
+        size as f32,
+        size as f32,
+    );
+
+    pb.finish()
 }

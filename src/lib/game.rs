@@ -23,6 +23,15 @@ pub struct Game {
     result: GameResult,
 }
 
+pub enum Piece {
+    King,
+    Queen,
+    Rook,
+    Bishop,
+    Knight,
+    Pawn,
+}
+
 impl Game {
     pub fn from_string(data: &str) -> Game {
         let result = pgn::parse(data);
