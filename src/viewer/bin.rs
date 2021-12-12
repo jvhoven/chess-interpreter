@@ -1,5 +1,7 @@
 use minifb::{Window, WindowOptions};
 use raqote::{DrawOptions, DrawTarget, Path, PathBuilder, SolidSource, Source};
+use lib::game::Piece;
+
 const WIDTH: usize = 400;
 const HEIGHT: usize = 400;
 
@@ -38,7 +40,7 @@ fn draw_gameboard(width: i32, height: i32) -> DrawTarget {
                 Source::Solid(color_white)
             };
 
-            let square = draw_square(square_size, x, y);
+            let square = draw_square(square_size, x, y, None);
             dt.fill(&square, &src, &DrawOptions::new());
         }
     }
@@ -46,7 +48,7 @@ fn draw_gameboard(width: i32, height: i32) -> DrawTarget {
     dt
 }
 
-fn draw_square(size: i32, x: i32, y: i32) -> Path {
+fn draw_square(size: i32, x: i32, y: i32, contents: Option<Piece>) -> Path {
     let mut pb = PathBuilder::new();
 
     pb.rect(
