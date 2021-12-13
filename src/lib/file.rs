@@ -9,7 +9,7 @@ pub enum File {
     E,
     F,
     G,
-    H
+    H,
 }
 
 pub const ALL_FILES: [File; 8] = [
@@ -20,7 +20,7 @@ pub const ALL_FILES: [File; 8] = [
     File::E,
     File::F,
     File::G,
-    File::H
+    File::H,
 ];
 
 impl File {
@@ -34,7 +34,7 @@ impl File {
             "f" => Some(File::F),
             "g" => Some(File::G),
             "h" => Some(File::H),
-            _ => None
+            _ => None,
         }
     }
 
@@ -44,5 +44,22 @@ impl File {
 
     pub fn to_index(&self) -> usize {
         *self as usize
+    }
+
+    pub fn to_int(&self) -> i8 {
+        ALL_FILES.iter().position(|&x| x == *self).unwrap() as i8
+    }
+
+    pub fn to_str(&self) -> &'static str {
+        match *self {
+            File::A => "a",
+            File::B => "b",
+            File::C => "c",
+            File::D => "d",
+            File::E => "e",
+            File::F => "f",
+            File::G => "g",
+            File::H => "h",
+        }
     }
 }

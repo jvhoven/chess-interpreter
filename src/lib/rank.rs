@@ -45,4 +45,21 @@ impl Rank {
     pub fn to_index(&self) -> usize {
         *self as usize
     }
+
+    pub fn to_int(&self) -> i8 {
+        ALL_RANKS.iter().position(|&r| r == *self).unwrap() as i8
+    }
+
+    pub fn to_str(&self) -> &'static str {
+        match *self {
+            Rank::One => "1",
+            Rank::Two => "2",
+            Rank::Three => "3",
+            Rank::Four => "4",
+            Rank::Five => "5",
+            Rank::Six => "6",
+            Rank::Seven => "7",
+            Rank::Eight => "8",
+        }
+    }
 }

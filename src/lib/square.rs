@@ -1,7 +1,7 @@
 use crate::{file::File, rank::Rank};
 
 #[derive(PartialEq, Debug, Copy, Clone)]
-pub struct Square(u8);
+pub struct Square(pub u8);
 
 impl Square {
     pub fn new(rank: Rank, file: File) -> Square {
@@ -22,6 +22,10 @@ impl Square {
 
     pub fn to_int(&self) -> u8 {
         self.0
+    }
+
+    pub fn coordinate(&self) -> (i8, i8) {
+        (self.file().to_int(), self.rank().to_int())
     }
 
     pub const A1: Square = Square(0);
@@ -110,5 +114,12 @@ mod tests {
     fn test_file() {
         let square = Square::new(Rank::Six, File::H);
         assert_eq!(square.file(), File::H);
+    }
+
+    #[test]
+    fn test_by_index() {
+        let square = Square(32);
+        assert_eq!(square.rank(), Rank::Five);
+        assert_eq!(square.file(), File::A);
     }
 }
