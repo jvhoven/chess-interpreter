@@ -28,6 +28,7 @@ fn main() {
 }
 
 // TODO: Introduce perspective, default as white
+// Probably by using bit arithmetics, but I don't understand how
 fn draw_gameboard(width: i32, height: i32) -> DrawTarget {
     let mut dt = DrawTarget::new(width, height);
     let square_size = width / 8;
@@ -50,6 +51,7 @@ fn draw_gameboard(width: i32, height: i32) -> DrawTarget {
         } else {
             (color_white, color_black)
         };
+
 
         let sq = draw_square(square_size, x as i32, y as i32);
         dt.fill(&sq, &Source::Solid(square_color), &DrawOptions::new());
