@@ -1,11 +1,14 @@
-use crate::{parser::pgn, square::Square};
-use std::{collections::HashMap};
+use crate::{board::Color, parser::pgn, piece::Piece, square::Square};
+use std::collections::HashMap;
 
 #[derive(Debug, PartialEq)]
 pub enum GameResult {
     WhiteWins,
     BlackWins,
     Draw,
+    /**
+     * game still in progress, game abandoned, or result otherwise unknown
+     */
     Unknown,
 }
 
@@ -20,6 +23,12 @@ pub struct Move {
     pub white: String,
     pub black: String,
     pub number: u16,
+}
+
+pub enum MoveType {
+    Castle,
+    Capture,
+    Move,
 }
 
 #[derive(Debug)]

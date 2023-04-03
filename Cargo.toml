@@ -17,10 +17,10 @@ path = "src/viewer/bin.rs"
 [dependencies]
 regex = "1"
 lazy_static = "1.4.0"
-raqote = "0.8.0"
-font-kit = "0.10.0"
-minifb = "0.20.0"
-png = { version = "0.17.2" }
+image = "0.24.6"
+egui = "0.21.0"
+egui_extras = { version = "0.21.0", features=["svg"] }
+eframe = "0.21.3"
 
 [dev-dependencies]
 glob = "0.3.0"

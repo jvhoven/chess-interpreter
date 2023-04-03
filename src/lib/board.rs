@@ -1,19 +1,49 @@
 use crate::{piece::Piece, square::Square};
+use std::{
+    collections::hash_map::DefaultHasher,
+    hash::{Hash, Hasher},
+};
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Hash)]
 pub enum Color {
+    White,
+    Black,
+}
+
+struct Squares {
+    data: [Option<(Piece, Color)>; 64],
+}
+
+impl Hash for Squares {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        for (idx, item) in self.data.iter().enumerate() {
+            state.write_u8(idx as u8);
+
+            if let Some((piece, color)) = item {
+                piece.hash(state);
+                color.hash(state);
+            }
+        }
+    }
+}
+
+pub enum Perspective {
     White,
     Black,
 }
 
 pub struct Board {
     pub squares: [Option<(Piece, Color)>; 64],
+    pub hash: u64,
+    pub perspective: Perspective,
 }
 
 impl Board {
     pub fn new() -> Board {
         Board {
             squares: [None; 64],
+            hash: 0,
+            perspective: Perspective::White,
         }
     }
 
@@ -24,7 +54,15 @@ impl Board {
             board.squares[piece.0.to_index()] = Some((piece.1, piece.2));
         }
 
+        board.hash = Board::calculate_hash(board.squares);
         board
+    }
+
+    pub fn calculate_hash<'a>(squares: [Option<(Piece, Color)>; 64]) -> u64 {
+        let mut hasher = DefaultHasher::new();
+        squares.hash(&mut hasher);
+
+        hasher.finish()
     }
 }
 

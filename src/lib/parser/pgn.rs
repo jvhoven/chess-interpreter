@@ -54,7 +54,8 @@ fn parse_moves(data: &str) -> Vec<Move> {
             white: capture[1].split(' ').nth(1).unwrap().to_string(),
             black: capture[1].split(' ').nth(2).unwrap().to_string(),
             number: capture[1]
-                .split('.').next()
+                .split('.')
+                .next()
                 .unwrap()
                 .parse::<u16>()
                 .expect("Could not parse move number"),
