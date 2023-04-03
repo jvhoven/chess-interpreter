@@ -1,15 +1,15 @@
 use core::fmt;
-use std::{collections::HashMap, str::FromStr, thread::current};
+use std::{collections::HashMap, str::FromStr};
 
-use eframe::egui;
-use egui::{Button, ComboBox, Id, Rect};
-use egui_extras::RetainedImage;
-use lazy_static::lazy_static;
-use lib::{
+use ci_core::{
     board::{Board, Color},
     piece::Piece,
     square::Square,
 };
+use eframe::egui;
+use egui::{ComboBox, Id, Rect};
+use egui_extras::RetainedImage;
+use lazy_static::lazy_static;
 
 #[derive(Hash, PartialEq, Eq)]
 enum ChessPiece {
@@ -292,8 +292,8 @@ impl Chessboard {
     }
 
     pub fn move_piece(&mut self) {
-        let from = Square::new(lib::rank::Rank::Two, lib::file::File::A);
-        let to = Square::new(lib::rank::Rank::Three, lib::file::File::A);
+        let from = Square::new(ci_core::rank::Rank::Two, ci_core::file::File::A);
+        let to = Square::new(ci_core::rank::Rank::Three, ci_core::file::File::A);
 
         let mut current_square: &Option<(Piece, Color)> = self
             .state

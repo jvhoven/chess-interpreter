@@ -1,7 +1,7 @@
 #![cfg(test)]
 mod tests {
-    use lib::game::GameResult;
-    use lib::parser::pgn;
+    use ci_core::game::GameResult;
+    use ci_png_parser::parse;
     use glob::glob;
 
     #[test]
@@ -13,7 +13,11 @@ mod tests {
                     let contents = std::fs::read_to_string(path).unwrap();
                     let game = pgn::parse(&contents);
 
-                    assert!(game.result != GameResult::Unknown, "Game has unknown outcome: {:?}", game);
+                    assert!(
+                        game.result != GameResult::Unknown,
+                        "Game has unknown outcome: {:?}",
+                        game
+                    );
                 }
                 Err(e) => println!("{:?}", e),
             }
